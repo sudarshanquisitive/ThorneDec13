@@ -18,12 +18,7 @@ import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.markuputils.ExtentColor;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 
-
-public class ExtentReportListener extends ExtentReportSetup implements ITestListener
-
-
-{
-
+public class ExtentReportListener extends ExtentReportSetup implements ITestListener{
 	private static String TestcaseName;
 	public static String getTestcaseName() {
 		return TestcaseName;

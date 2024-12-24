@@ -1,11 +1,15 @@
 package com.ThorneAut.BaseClass;
 import java.awt.AWTException;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -18,7 +22,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 
 import org.testng.annotations.BeforeTest;
-
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class TestBase
@@ -28,6 +31,7 @@ public class TestBase
 	public static ChromeOptions chromeOptions;
 	public static Logger Log;
 	public static String URL;
+	public static String dynamickey;
 
 	public TestBase()
 	{
@@ -58,17 +62,21 @@ public class TestBase
 	}
 
 	public void initialization() {
+		dynamickeyword();
 		WebDriverManager.chromedriver().setup();
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("--no-sandbox");
 		options.addArguments("--disable-dev-shm-usage");
-		options.addArguments("--headless");
+		Map<String, Object> prefs = new HashMap<String, Object>();
+		prefs.put("autofill.profile_enabled", false);
+		options.setExperimentalOption("prefs", prefs);
+		//options.addArguments("--headless");
 		driver = new ChromeDriver(options);
 		String URL= property.getProperty("appURL").trim();
 		System.out.println("URL is "+URL);
 		driver.get(URL);
 		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
 	}
 
 	@AfterTest
@@ -98,6 +106,15 @@ public class TestBase
 		System.setProperty("current_date", dateFormat.format(new Date()));
 		PropertyConfigurator.configure("./resources/log4j.properties");
 	}
+	
+	public static void dynamickeyword() {
+		DateFormat dateFormat2 = new SimpleDateFormat("ddMMHHmmss");
+		Date date = new Date();
+		dynamickey = dateFormat2.format(date);
+		System.out.println("Dynamickeyword: " + dynamickey);
+	}
+	
+	
 
 
 }
